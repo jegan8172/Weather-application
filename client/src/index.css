@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #f2f2f7;
+  transition: background 0.8s ease;
+}
+
+/* ---- Dark, weather-reactive backgrounds: each uses 2-3 accent colors ---- */
+.bg-default {
+  --accent-1: #6c5ce7;
+  --accent-2: #00d2d3;
+  background: linear-gradient(160deg, #0f0f1e 0%, #1a1a3e 55%, #16213e 100%);
+}
+.bg-clear {
+  --accent-1: #ffb347;
+  --accent-2: #ff6b6b;
+  background: linear-gradient(160deg, #1a1224 0%, #2b1930 55%, #100b1a 100%);
+}
+.bg-clouds {
+  --accent-1: #7dd3fc;
+  --accent-2: #a5b4fc;
+  background: linear-gradient(160deg, #10131a 0%, #1c2333 55%, #0d0f16 100%);
+}
+.bg-rain {
+  --accent-1: #22d3ee;
+  --accent-2: #3b82f6;
+  background: linear-gradient(160deg, #05131a 0%, #0b2436 55%, #030b12 100%);
+}
+.bg-thunderstorm {
+  --accent-1: #c084fc;
+  --accent-2: #f472b6;
+  background: linear-gradient(160deg, #12081f 0%, #200e33 55%, #0a0512 100%);
+}
+.bg-snow {
+  --accent-1: #67e8f9;
+  --accent-2: #c4b5fd;
+  background: linear-gradient(160deg, #0b1220 0%, #16223a 55%, #080d17 100%);
+}
+.bg-mist {
+  --accent-1: #86efac;
+  --accent-2: #5eead4;
+  background: linear-gradient(160deg, #0d1512 0%, #182420 55%, #0a100e 100%);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---- Ambient glowing particles, colored from the accent pair ---- */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: 0.35;
+  animation: float 12s ease-in-out infinite;
+  pointer-events: none;
+}
+.particle:nth-child(1) { width: 220px; height: 220px; top: 8%; left: 5%; background: var(--accent-1); animation-duration: 14s; }
+.particle:nth-child(2) { width: 160px; height: 160px; top: 60%; left: 75%; background: var(--accent-2); animation-duration: 10s; animation-delay: -3s; }
+.particle:nth-child(3) { width: 100px; height: 100px; top: 15%; left: 80%; background: var(--accent-2); animation-duration: 9s; animation-delay: -1s; }
+.particle:nth-child(4) { width: 180px; height: 180px; top: 72%; left: 10%; background: var(--accent-1); animation-duration: 16s; animation-delay: -6s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-24px) translateX(12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle { animation: none; }
+}
+
+/* ---- Content ---- */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Search bar ---- */
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f2f2f7;
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.search-bar input:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-1) 30%, transparent);
+}
+.search-bar input::placeholder {
+  color: #8a8aa0;
+}
+
+.search-bar button {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  color: #0f0f1e;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease;
+}
+.search-bar button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.search-bar button:active {
+  transform: translateY(0);
+}
+
+/* ---- Glass weather card ---- */
+.weather-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: #f2f2f7;
+  animation: rise 0.4s ease;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.weather-card .location {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0 0 4px;
+  color: #f2f2f7;
+}
+
+.weather-card .temp {
+  font-family: 'Poppins', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  margin: 4px 0;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.weather-card .description {
+  text-transform: capitalize;
+  font-size: 16px;
+  margin: 0 0 16px;
+  color: #b8b8c8;
+}
+
+.weather-card .meta {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 13px;
+  color: #9797ac;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+.weather-card .meta strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--accent-1);
+}
+
+.weather-card img {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--accent-1) 50%, transparent));
+}
+
+/* ---- States ---- */
+.status-text {
+  color: #b8b8c8;
+  font-size: 15px;
+}
+
+.error-text {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: #fda4af;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .title { font-size: 24px; }
+  .weather-card .temp { font-size: 52px; }
+}
